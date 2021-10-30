@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Company;
 use Illuminate\Http\Request;
-
+use Intervention\Image\Facades\Image;
+use DB;
 class CompanyController extends Controller
 {
     /**
@@ -12,9 +13,15 @@ class CompanyController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return view('company.index');
+        // $data = Company::paginate(10);
+        $data = Company::all();
+
+        if($request->ajax())
+            return datatables()->of($data)->make(true);
+
+        return view('company.index',compact('data'));
     }
 
     /**
@@ -24,7 +31,7 @@ class CompanyController extends Controller
      */
     public function create()
     {
-        //
+        return view('company.create');
     }
 
     /**
@@ -35,7 +42,25 @@ class CompanyController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'create_name' => 'required',
+            'create_email' => 'email',
+        ]);
+
+        $data = [
+            'name' => $request->create_name,
+            'email' => $request->create_email,
+            'website' => $request->create_website
+        ];
+        if($request->hasfile('create_logo')){
+          $file = $request->file('create_logo');
+          $extension = $file->getClientOriginalExtension();
+          $logo = date('Y-m-d').".".time().".".$extension;
+          Image::make($file)->resize(100, 100)->save( storage_path('/app/public/logo/' . $logo) );
+          $data['logo'] = $logo;
+        } 
+        Company::create($data);
+        return back()->with('status', 'Company Added Successfully!');
     }
 
     /**
@@ -55,9 +80,11 @@ class CompanyController extends Controller
      * @param  \App\Models\Company  $company
      * @return \Illuminate\Http\Response
      */
-    public function edit(Company $company)
+    public function edit(Request $request)
     {
-        //
+        if($request->ajax()) {
+            return response (Company::find($request->id));
+        }
     }
 
     /**
@@ -67,9 +94,26 @@ class CompanyController extends Controller
      * @param  \App\Models\Company  $company
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Company $company)
-    {
-        //
+    public function update(Request $request)
+    {  
+        $request->validate([
+        'name' => 'required',
+        'email' => 'email',
+        ]);
+
+        
+        $data = $request->all();
+    
+        if($request->hasfile('logo')){
+          $file = $request->file('logo');
+          $extension = $file->getClientOriginalExtension();
+          $logo = date('Y-m-d').".".time().".".$extension;
+          Image::make($file)->resize(100, 100)->save( storage_path('/app/public/logo/' . $logo) );
+          $data['logo'] = $logo;
+        } 
+        $company = Company::find($request->id)->update($data);
+        
+        return back()->with('status', 'Company Updated Successfully!');
     }
 
     /**
@@ -78,8 +122,11 @@ class CompanyController extends Controller
      * @param  \App\Models\Company  $company
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Company $company)
+    public function destroy($id)
     {
-        //
+        $data = Company::find($id);
+        // $data->delete();
+        return back()->with('status','Company Deleted Successfully!');
+        
     }
 }

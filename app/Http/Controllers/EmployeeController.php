@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Employee;
+use App\Models\Company;
 use Illuminate\Http\Request;
-
+use DB;
 class EmployeeController extends Controller
 {
     /**
@@ -14,7 +15,16 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-        return view('employee.index');
+        $companies = Company::select('id','name')->get();
+        $data =   DB::table('employees')
+                    ->join('companies', 'employees.company_id', '=', 'companies.id')
+                    ->select('companies.name',
+                            'employees.first_name',
+                            'employees.last_name',
+                            'employees.email',
+                            'employees.phone')->get();
+        dd($data);
+        return view('employee.index',compact('companies'));
     }
 
     /**
@@ -35,7 +45,21 @@ class EmployeeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'create_firstname' => 'required',
+            'create_lastname' => 'required',
+            'create_email' => 'email',
+        ]);
+        $data = [
+            'first_name' => $request->create_firstname,
+            'last_name' =>$request->create_lastname,
+            'email' => $request->create_email,
+            'phone' => $request->create_phone,
+            'company_id' =>$request->company_name
+        ];
+
+        Employee::create($data);
+        return back()->with('status', 'Employee Added Successfully!');
     }
 
     /**

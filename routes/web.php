@@ -17,8 +17,10 @@ use App\Http\Controllers\EmployeeController;
 Route::get('/', function () {
     return redirect(route('login'));
 });
-Route::resource('company', CompanyController::class);
-Route::resource('employee', EmployeeController::class);
+Route::middleware(['auth'])->group(function (){
+    Route::resource('company', CompanyController::class);
+    Route::resource('employee', EmployeeController::class);
+});
 
 Auth::routes();
 
