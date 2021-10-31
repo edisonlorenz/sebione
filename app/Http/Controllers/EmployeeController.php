@@ -13,17 +13,23 @@ class EmployeeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $companies = Company::select('id','name')->get();
+       
         $data =   DB::table('employees')
                     ->join('companies', 'employees.company_id', '=', 'companies.id')
-                    ->select('companies.name',
+                    ->select('companies.id as  company_id',
+                            'companies.name',
+                            'employees.id as user_id',
                             'employees.first_name',
                             'employees.last_name',
                             'employees.email',
                             'employees.phone')->get();
-        dd($data);
+        if($request->ajax()){
+            return datatables()->of($data)->make(true);
+        }
+             
+        $companies = Company::select('id','name')->get();             
         return view('employee.index',compact('companies'));
     }
 
@@ -55,7 +61,7 @@ class EmployeeController extends Controller
             'last_name' =>$request->create_lastname,
             'email' => $request->create_email,
             'phone' => $request->create_phone,
-            'company_id' =>$request->company_name
+            'company_id' =>$request->create_companyname
         ];
 
         Employee::create($data);
@@ -79,9 +85,19 @@ class EmployeeController extends Controller
      * @param  \App\Models\Employee  $employee
      * @return \Illuminate\Http\Response
      */
-    public function edit(Employee $employee)
-    {
-        //
+    public function edit(Request $request){
+    $data =   DB::table('employees')
+    ->join('companies', 'employees.company_id', '=', 'companies.id')
+    ->select('companies.id as  company_id',
+            'companies.name',
+            'employees.id as user_id',
+            'employees.first_name',
+            'employees.last_name',
+            'employees.email',
+            'employees.phone')->get();
+        if($request->ajax()) {
+            return response (Employee::find($request->id));
+        }
     }
 
     /**
@@ -91,9 +107,24 @@ class EmployeeController extends Controller
      * @param  \App\Models\Employee  $employee
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Employee $employee)
+    public function update(Request $request)
     {
-        //
+        $request->validate([
+            'edit_firstname' => 'required',
+            'edit_lastname' => 'required',
+            'edit_email' => 'email'
+            ]);
+
+            $data = [
+                'first_name' => $request->edit_firstname,
+                'last_name' =>$request->edit_lastname,
+                'email' => $request->edit_email,
+                'phone' => $request->edit_phone,
+                'company_id' =>$request->edit_employeeId
+            ];
+            $data = Employee::find($request->user_id)->update($data);
+  
+            return back()->with('status','Employee Added Successfully!');
     }
 
     /**

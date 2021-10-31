@@ -125,7 +125,7 @@ class CompanyController extends Controller
     public function destroy($id)
     {
         $data = Company::find($id);
-        // $data->delete();
+        $data->delete();
         return back()->with('status','Company Deleted Successfully!');
         
     }

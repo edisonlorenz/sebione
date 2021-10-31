@@ -2,6 +2,7 @@
 
 @section('content')
 @include('layouts.modals.employee.create')
+@include('layouts.modals.employee.edit')
 <div class="container-fluid">  
     <div class="d-flex justify-content-between p-1">
         <h2 class="font-weight-light">List of Employees</h2>
@@ -12,11 +13,78 @@
             <tr>
                 <th>Company</th>
                 <th>First name</th>
-                <th>Last name</th>
+                <th>Lastname</th>
                 <th>Email</th>
                 <th>Phone</th>
+                <th>Action</th>
             </tr>
         </thead>
     </table>    
 </div>
+@endsection
+@section('script')
+<script>
+     $(document).ready(function() {
+        fetch_data();
+
+        function fetch_data(){
+            $('#data_table').DataTable({
+                processing: false,
+                serverSide: true,
+                ajax:"{{ route('employee.index') }}",
+                columns:[
+                    {
+                        data: 'user_id',
+                        name: 'user_id'
+                    },
+                    {
+                        data: 'first_name',
+                        name: 'first_name'
+                    },
+                    {
+                        data: 'last_name',
+                        name: 'last_name'
+                    },
+                    {
+                        data: 'email',
+                        name: 'email'
+                    },
+                    {
+                        data: 'phone',
+                        name: 'phone'
+                    },
+                    {
+                        data:null,
+                        render: function(data,type,row){
+                            return '<div class="btn-group" role="group">'+
+                            '<button id="edit_employee" class="btn btn-primary btn-sm" style="margin-right:10px;" value="'+row['user_id'] +'" >Edit</button>' +
+                            '<button id="delete_employee" class="btn btn-danger btn-sm" value="'+row['user_id'] +'" >Delete</button>' +
+                        '</div>';
+                        }
+                    }
+                 
+                ]
+            })
+    }
+     // Edit Company
+    $('#data_table tbody').on( 'click', '#edit_employee', function () {
+            var id = $(this).val(); 
+            console.log('Editss' +id);
+            $('#editEmployee').modal('show');
+            $('#editFormEmployee').prop('action',"{{ route('employee.update',"id") }}");
+            $.get("{{ route('employee.edit',"id") }}", {id:id}, function(data) {
+                $('#edit_employeeId').val(data.id);
+                $('#edit_companyId').val(data.name);
+                $('#edit_firstname').val(data.first_name);
+                $('#edit_lastname').val(data.last_name);
+                $('#edit_email').val(data.email);
+                $('#edit_phone').val(data.website);
+            });
+
+         });
+
+
+
+     });
+</script>
 @endsection

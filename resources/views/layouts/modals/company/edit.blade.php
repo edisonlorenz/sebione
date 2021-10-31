@@ -1,7 +1,7 @@
-<div class="modal" tabindex="-1" id="editCompany" role="dialog">
+<div class="modal" tabindex="-1" id="editEmployee" role="dialog">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
-    <form id="editFormCompany" method="post" enctype="multipart/form-data"> 
+    <form id="editFormEmployee" method="post" enctype="multipart/form-data"> 
         {{ csrf_field() }}
         {{ method_field('PUT') }} 
             <div class="modal-header">
