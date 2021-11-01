@@ -1,23 +1,9 @@
-@extends('layouts.app')
+@extends('layouts.master')
 
 @section('content')
 @include('layouts.modals.company.create')
 @include('layouts.modals.company.delete')
 @include('layouts.modals.company.edit')
-@if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
-@if(Session::has('status'))
-<div class="alert alert-success">
-  {{ Session::get('status')}}
-</div>
-@endif
 <div class="container-fluid">  
     <div class="d-flex justify-content-between p-1">
         <h2 class="font-weight-light">List of Companies</h2>
@@ -39,6 +25,7 @@
 @section('script')
 <script>
     $(document).ready(function() {
+        console.log('EDISONT');
         fetch_data();
 
         function fetch_data(){
@@ -70,8 +57,8 @@
                         data:null,
                         render: function(data,type,row){
                             return '<div class="btn-group" role="group">'+
-                            '<button id="edit_company" class="btn btn-primary btn-sm" style="margin-right:10px;" value="'+row['id'] +'" >Edit</button>' +
-                            '<button id="delete_company" class="btn btn-danger btn-sm" value="'+row['id'] +'" >Delete</button>' +
+                            '<button id="edit_company" class="btn btn-info btn-sm" data-toggle="modal" data-target="#editCompany" value="'+row['id'] +'" >Edit</button>' +
+                            '<button id="delete_company" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteCompany" value="'+row['id'] +'" >Delete</button>' +
                         '</div>';
                         }
                     }
@@ -82,7 +69,6 @@
         $('#data_table tbody').on( 'click', '#edit_company', function () {
             var id = $(this).val(); 
             console.log('Edit '+id);
-            $('#editCompany').modal('show');
             $('#editFormCompany').prop('action',"{{ route('company.update',"id") }}");
             $.get("{{ route('company.edit',"id") }}", {id:id}, function(data) {
                 $('#editLogo').attr('src','storage/logo/'+data.logo);
@@ -96,7 +82,6 @@
         //  Delete Company
          $('#data_table tbody').on( 'click', '#delete_company', function () {
             var id = $(this).val(); 
-            $('#deleteCompany').modal('show');
             $('#deleteFormCompany').prop('action','/company/'+id);
          });
         }

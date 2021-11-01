@@ -13,7 +13,7 @@
             <div class="modal-body">
                 <input type="text" class="form-control" id="id" name="id" hidden>
                 <div class="m-3">
-                    <img id="editLogo" src="#" width='200' height='200' class='rounded mx-auto d-block'/>
+                    <img id="editLogo" src="/img/placeholder.jpg" width='200' height='200' class='rounded mx-auto d-block'/>
                 </div>
                 <div class="form-group">
                     <input type="file" class="form-control" id="logo" name="logo"  onchange="readImage(this);" accept="image/x-png, image/png, image/jpg, image/jpeg">
@@ -29,7 +29,7 @@
                 </div>
             </div>
       <div class="modal-footer">
-        <button type="submit" class="btn btn-primary">Save changes</button>
+        <button type="submit" class="btn btn-primary">Save</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
       </div>
     </form>

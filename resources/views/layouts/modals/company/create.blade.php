@@ -12,7 +12,7 @@
             </div>
             <div class="modal-body">
                 <div class="m-3">
-                    <img id="createLogo" src="#" width='200' height='200' class='rounded mx-auto d-block'alt="Upload Image"/>
+                    <img id="createLogo" src="/img/placeholder.jpg" width='200' height='200' class='rounded mx-auto d-block'alt="Upload Image"/>
                 </div>
                 <div class="form-group">
                     <input type="file" class="form-control" id="create_logo" name="create_logo"  onchange="readImage(this);" accept="image/x-png, image/png, image/jpg, image/jpeg">
