@@ -56,7 +56,7 @@ class EmployeeController extends Controller
             'create_companyname' => 'required',
             'create_firstname' => 'required',
             'create_lastname' => 'required',
-            'create_email' => 'email|unique',
+            'create_email' => 'email',
         ]);
         $data = [
             'first_name' => $request->create_firstname,
@@ -114,7 +114,7 @@ class EmployeeController extends Controller
         $request->validate([
             'edit_firstname' => 'required',
             'edit_lastname' => 'required',
-            'edit_email' => 'email|unique'
+            'edit_email' => 'email'
             ]);
             $data = [
                 'first_name' => $request->edit_firstname,

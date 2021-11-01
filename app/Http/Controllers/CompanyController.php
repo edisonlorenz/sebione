@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\SendMail;
 use App\Models\Company;
 use Illuminate\Http\Request;
 use Intervention\Image\Facades\Image;
+use Illuminate\Support\Facades\Mail;
 use DB;
 class CompanyController extends Controller
 {
@@ -44,7 +46,7 @@ class CompanyController extends Controller
     {
         $request->validate([
             'create_name' => 'required',
-            'create_email' => 'email|unique',
+            'create_email' => 'email',
         ]);
 
         $data = [
@@ -60,6 +62,7 @@ class CompanyController extends Controller
           $data['logo'] = $logo;
         } 
         Company::create($data);
+        Mail::to($request->create_email)->send(new SendMail());
         return back()->with('status', 'Company Added Successfully!');
     }
 
@@ -98,7 +101,7 @@ class CompanyController extends Controller
     {  
         $request->validate([
         'name' => 'required',
-        'email' => 'email|unique',
+        'email' => 'email',
         ]);
 
         
