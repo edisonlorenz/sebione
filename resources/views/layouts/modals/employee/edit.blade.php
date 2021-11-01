@@ -12,7 +12,7 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <select id="edit_companyId" name="create_companyname" class="form-control">
+                    <select id="edit_companyId" name="edit_companyname" class="form-control">
                         <option value="" disabled selected>Company</option>
                         @foreach($companies as $company)
                                 <option value="{{ $company->id }}">{{ $company->name}}</option>

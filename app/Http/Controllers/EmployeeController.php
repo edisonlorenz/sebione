@@ -25,6 +25,7 @@ class EmployeeController extends Controller
                             'employees.last_name',
                             'employees.email',
                             'employees.phone')->get();
+                            // dd($data);
         if($request->ajax()){
             return datatables()->of($data)->make(true);
         }
@@ -52,9 +53,10 @@ class EmployeeController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'create_companyname' => 'required',
             'create_firstname' => 'required',
             'create_lastname' => 'required',
-            'create_email' => 'email',
+            'create_email' => 'email|unique',
         ]);
         $data = [
             'first_name' => $request->create_firstname,
@@ -112,19 +114,18 @@ class EmployeeController extends Controller
         $request->validate([
             'edit_firstname' => 'required',
             'edit_lastname' => 'required',
-            'edit_email' => 'email'
+            'edit_email' => 'email|unique'
             ]);
-
             $data = [
                 'first_name' => $request->edit_firstname,
                 'last_name' =>$request->edit_lastname,
                 'email' => $request->edit_email,
                 'phone' => $request->edit_phone,
-                'company_id' =>$request->edit_employeeId
+                'company_id' =>$request->edit_companyname,
             ];
-            $data = Employee::find($request->user_id)->update($data);
+            $data = Employee::find($request->edit_employeeId)->update($data);
   
-            return back()->with('status','Employee Added Successfully!');
+            return back()->with('status','Employee Updated Successfully!');
     }
 
     /**
@@ -133,8 +134,8 @@ class EmployeeController extends Controller
      * @param  \App\Models\Employee  $employee
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Employee $employee)
+    public function destroy($id)
     {
-        //
+        return back()->with('status','Employee Deleted Successfully!');
     }
 }

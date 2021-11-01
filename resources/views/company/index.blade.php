@@ -85,7 +85,6 @@
             $('#editCompany').modal('show');
             $('#editFormCompany').prop('action',"{{ route('company.update',"id") }}");
             $.get("{{ route('company.edit',"id") }}", {id:id}, function(data) {
-                console.log(data);
                 $('#editLogo').attr('src','storage/logo/'+data.logo);
                 $('#id').val(data.id);
                 $('#name').val(data.name);
@@ -97,7 +96,6 @@
         //  Delete Company
          $('#data_table tbody').on( 'click', '#delete_company', function () {
             var id = $(this).val(); 
-            console.log('Delete '+id);
             $('#deleteCompany').modal('show');
             $('#deleteFormCompany').prop('action','/company/'+id);
          });

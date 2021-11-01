@@ -44,7 +44,7 @@ class CompanyController extends Controller
     {
         $request->validate([
             'create_name' => 'required',
-            'create_email' => 'email',
+            'create_email' => 'email|unique',
         ]);
 
         $data = [
@@ -98,7 +98,7 @@ class CompanyController extends Controller
     {  
         $request->validate([
         'name' => 'required',
-        'email' => 'email',
+        'email' => 'email|unique',
         ]);
 
         

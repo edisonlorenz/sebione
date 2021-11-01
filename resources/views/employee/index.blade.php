@@ -3,6 +3,21 @@
 @section('content')
 @include('layouts.modals.employee.create')
 @include('layouts.modals.employee.edit')
+@include('layouts.modals.employee.delete')
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+@if(Session::has('status'))
+<div class="alert alert-success">
+  {{ Session::get('status')}}
+</div>
+@endif
 <div class="container-fluid">  
     <div class="d-flex justify-content-between p-1">
         <h2 class="font-weight-light">List of Employees</h2>
@@ -34,8 +49,8 @@
                 ajax:"{{ route('employee.index') }}",
                 columns:[
                     {
-                        data: 'user_id',
-                        name: 'user_id'
+                        data: 'name',
+                        name: 'name'
                     },
                     {
                         data: 'first_name',
@@ -66,24 +81,31 @@
                 ]
             })
     }
-     // Edit Company
+     // Edit Employee
     $('#data_table tbody').on( 'click', '#edit_employee', function () {
             var id = $(this).val(); 
             console.log('Editss' +id);
             $('#editEmployee').modal('show');
             $('#editFormEmployee').prop('action',"{{ route('employee.update',"id") }}");
             $.get("{{ route('employee.edit',"id") }}", {id:id}, function(data) {
+                console.log(data);
                 $('#edit_employeeId').val(data.id);
-                $('#edit_companyId').val(data.name);
+                $('#edit_companyId').val(data.company_id);
                 $('#edit_firstname').val(data.first_name);
                 $('#edit_lastname').val(data.last_name);
                 $('#edit_email').val(data.email);
-                $('#edit_phone').val(data.website);
+                $('#edit_phone').val(data.phone);
             });
 
          });
 
-
+         //  Delete Employee
+         $('#data_table tbody').on( 'click', '#delete_employee', function () {
+            var id = $(this).val(); 
+            console.log('Delete '+id);
+            $('#deleteEmployee').modal('show');
+            $('#deleteFormEmployee').prop('action',"{{ route('employee.destroy',"id") }}");
+         });
 
      });
 </script>
