@@ -18,7 +18,7 @@
                 <th>Lastname</th>
                 <th>Email</th>
                 <th>Phone</th>
-                <th>Action</th>
+                <th style="width:15%">Action</th>
             </tr>
         </thead>
     </table>    
@@ -58,7 +58,7 @@
                     {
                         data:null,
                         render: function(data,type,row){
-                            return '<div class="btn-group" role="group">'+
+                            return '<div class="d-flex justify-content-around" role="group">'+
                             '<button id="edit_employee" class="btn btn-primary btn-sm" style="margin-right:10px;" data-toggle="modal" data-target="#editEmployee" value="'+row['user_id'] +'" >Edit</button>' +
                             '<button id="delete_employee" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteEmployee" value="'+row['user_id'] +'" >Delete</button>' +
                         '</div>';
@@ -89,7 +89,7 @@
          $('#data_table tbody').on( 'click', '#delete_employee', function () {
             var id = $(this).val(); 
             console.log('Delete '+id);
-            $('#deleteFormEmployee').prop('action',"{{ route('employee.destroy',"id") }}");
+            $('#deleteFormEmployee').prop('action',"employee/"+id);
          });
 
      });

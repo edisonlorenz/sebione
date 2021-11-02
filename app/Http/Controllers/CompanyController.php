@@ -62,6 +62,7 @@ class CompanyController extends Controller
           $data['logo'] = $logo;
         } 
         Company::create($data);
+
         Mail::to($request->create_email)->send(new SendMail());
         return back()->with('status', 'Company Added Successfully!');
     }

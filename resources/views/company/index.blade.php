@@ -16,7 +16,7 @@
                 <th>Name</th>
                 <th>Email</th>
                 <th>Website</th>
-                <th>View</th>
+                <th style="width:15%">Actions</th>
             </tr>
         </thead>
     </table>    
@@ -56,7 +56,7 @@
                     {
                         data:null,
                         render: function(data,type,row){
-                            return '<div class="btn-group" role="group">'+
+                            return '<div class="d-flex justify-content-around" role="group">'+
                             '<button id="edit_company" class="btn btn-info btn-sm" data-toggle="modal" data-target="#editCompany" value="'+row['id'] +'" >Edit</button>' +
                             '<button id="delete_company" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteCompany" value="'+row['id'] +'" >Delete</button>' +
                         '</div>';

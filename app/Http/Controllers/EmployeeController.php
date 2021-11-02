@@ -136,6 +136,9 @@ class EmployeeController extends Controller
      */
     public function destroy($id)
     {
+        $data = Employee::find($id);
+        $data->delete();
+
         return back()->with('status','Employee Deleted Successfully!');
     }
 }
